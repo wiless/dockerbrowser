@@ -1,0 +1,150 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html lang="en">
+	<head>
+			<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+			<title>PrettyPrint</title>
+
+			<style type="text/css">
+				body {background:#EEE;color:#222;font:0.8em Arial,Verdana,Sans-Serif;margin:0;padding:20px;}
+				#debug {
+					width: 700px;
+				}
+
+			</style>
+		<script src="js/prettyprint.js"></script>
+		<script src="js/jquery.min.js"></script>
+
+		<script>
+		
+function getImages(){
+		$.getJSON('http://localhost:8080/images', function(data) {
+			var ppTable = prettyPrint(data);
+			elem=document.getElementById('debug');
+			elem.textContent="";
+			elem.appendChild(ppTable);
+			// document.getElementById('debug').appendChild(ppTable);
+
+});
+}			
+
+function getContainers(){
+		$.getJSON('http://localhost:8080/containers', function(data) {
+			var ppTable = prettyPrint(data);
+			elem=document.getElementById('debug');
+			elem.textContent="";
+			elem.appendChild(ppTable);
+			// document.getElementById('debug').appendChild(ppTable);
+
+});
+}			
+
+function runImage(){
+data=$("#image").val();
+	obj={image:data};
+	fn=function(data) {
+		// jdata=JSON.parse(data);
+		jdata=data;
+			var ppTable = prettyPrint(jdata);
+			elem=document.getElementById('debug');
+			elem.textContent="";
+			elem.appendChild(ppTable);	
+}
+
+$.ajax({
+type:"POST",
+  url: 'http://localhost:8080/images',
+  data: obj,
+  success:fn,
+  dataType: 'json'
+});
+}
+function inspect(){
+	data=$("#id").val();
+	obj={id:data};
+	fn=function(data) {
+		// jdata=JSON.parse(data);
+		jdata=data;
+			var ppTable = prettyPrint(jdata);
+			elem=document.getElementById('debug');
+			elem.textContent="";
+			elem.appendChild(ppTable);
+			 
+}
+
+$.ajax({
+type:"POST",
+  url: 'http://localhost:8080/containers',
+  data: obj,
+  success:fn,
+  dataType: 'json'
+});
+		
+}
+
+function getData1(){
+
+
+			var randomObject = {
+				life: 42.01,
+				r1: new RegExp('\\$..?[0-5]+'),
+				r2: /foo(.+?)$/,
+				funky: function(foo, bib, bab) {
+					if (foo !== bib) {
+                        console.log('Error: ', '...');               
+                    }
+                    return RegExp(bab).exec(foo);
+				},
+				foo: {
+					prop: [1,2,3,{a:1}],
+					prop2: [
+						new Date(),
+						"som\"ething else"
+					]
+				},
+				domThing: document.body.firstChild
+			};
+			
+			randomObject.circularRef = randomObject;			
+			var ppTable = prettyPrint(randomObject);
+			elem=document.getElementById('debug');
+			elem.textContent="";
+			elem.appendChild(ppTable);
+
+			}
+
+		</script>
+
+	</head>
+	<body>
+		
+		<!-- prettyPrint demo -->
+		<button type="button" onclick="getData1()">Random</button>
+
+		<button type="button" onclick="getImages()">Images</button>	<input id="image" type="text" >
+		<button type="button" onclick="runImage()">Run</button>
+
+
+
+		<button type="button" onclick="getContainers()">Containers</button>
+		<input id="id" type="text" >
+		<button type="button" onclick="inspect()">Inspect</button>
+		<div id="debug"></div>
+		
+		
+	</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
